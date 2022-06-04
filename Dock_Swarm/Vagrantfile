@@ -1,0 +1,35 @@
+servers=[
+    {
+      :hostname => "admin",
+      :ip => "172.16.1.10",
+      :box => "williamyeh/ubuntu-trusty64-docker",
+      :ram => 1024,
+      :cpu => 1
+    },
+    {
+      :hostname => "user",
+      :ip => "172.16.1.20",
+      :box => "williamyeh/ubuntu-trusty64-docker",
+      :ram => 1024,
+      :cpu => 1
+    }
+  ]
+  Vagrant.configure(2) do |config|
+    servers.each do |maquina|
+      config.vm.define maquina[:hostname] do |node|
+        node.vm.box = maquina[:box]
+        node.vm.hostname = maquina[:hostname]
+        node.vm.network "private_network", ip: maquina[:ip]
+        if maquina[:hostname] == "manager"
+          node.vm.provision "docker"
+        else
+          node.vm.provision "docker"
+        end
+        node.vm.provider "vmware_desktop" do |vb|
+          vb.vmx["memsize"] =maquina[:ram]
+          vb.vmx["numvcpus"]=maquina[:cpu]          
+        end
+      end
+    end
+  end
+  

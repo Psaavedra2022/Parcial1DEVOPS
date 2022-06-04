@@ -1,0 +1,12 @@
+---
+# tasks file for php
+- name: Install php extensions
+  yum: name={{ item }} state=present
+  become: yes
+  with_items:
+    - php-common
+    - php-mysql
+    - php-gd
+    - php-xml
+    - php-mbstring
+    - php-mcrypt
